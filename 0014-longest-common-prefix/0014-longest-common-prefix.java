@@ -4,27 +4,12 @@ class Solution {
             return strs[0];
         }
         
-        Map<String, Integer> map = new HashMap<>();
-        for (int i=0; i<strs.length - 1; i++) {
-             String temp = "";
-             for (char c : strs[i].toCharArray()) {
-                 temp += c;
-                 if (map.containsKey(temp)) {
-                     map.put(temp, map.get(temp) + 1);
-                 } else {
-                     map.put(temp, 1);
-                 }
-             }
-        }
-        String answer = "";
-        String temp = "";
-        for (char c : strs[strs.length - 1].toCharArray()) {
-            temp += c;
-            if (map.containsKey(temp) && map.get(temp) == strs.length - 1) {
-                answer = temp;
+        String prefix = strs[0];
+        for (int i=1; i<strs.length; i++) {
+            while (strs[i].indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
             }
         }
-        
-        return answer;
+        return prefix;
     }
 }
