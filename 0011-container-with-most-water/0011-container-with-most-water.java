@@ -9,7 +9,10 @@ class Solution {
             answer = Math.max(answer, (right - left) * Math.min(rh, lh));
             if (rh < lh) {
                 right--;
+            } else if (rh > lh) {
+                left++;
             } else {
+                right--;
                 left++;
             }
         }
