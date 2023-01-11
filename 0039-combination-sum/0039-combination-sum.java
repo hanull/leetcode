@@ -16,7 +16,6 @@ class Solution {
         }
         
         for (int i=index; i<candidates.length; i++) {
-            if (i > 0 && candidates[i-1] == candidates[i]) continue;
             pickNums.add(candidates[i]);
             sum += candidates[i];
             dfs(i, sum, pickNums, candidates, target, answer);
