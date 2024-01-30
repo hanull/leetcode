@@ -1,29 +1,32 @@
 class Solution {
     
-    static Map<Character, Character> map = new HashMap<>();
-    static {
-        map.put(')', '(');
-        map.put('}', '{');
-        map.put(']', '[');
-    }
-    
     public boolean isValid(String s) {
-        if (s.length() % 2 == 1) {
-            return false;
-        }
+        Stack<Character> brackets = new Stack<>();
         
-        Stack<Character> stack = new Stack<>();
-        for (char c : s.toCharArray()) {
-            if (c == '(' || c == '{' || c == '[') {
-                stack.add(c);
-            } else {
-                if (!stack.isEmpty() && stack.peek() == map.get(c)) {
-                    stack.pop();
-                } else {
+        for (char bracket : s.toCharArray()) {
+            if (bracket == '(' || bracket == '{' || bracket == '[') {
+                brackets.add(bracket);
+                continue;
+            }
+            
+            if (bracket == ')') {
+                if (brackets.isEmpty() || brackets.peek() != '(') {
                     return false;
                 }
+                brackets.pop();
+            } else if (bracket == '}') {
+                if (brackets.isEmpty() || brackets.peek() != '{') {
+                    return false;
+                }
+                brackets.pop();
+            } else {
+                if (brackets.isEmpty() || brackets.peek() != '[') {
+                    return false;
+                }
+                brackets.pop();
             }
         }
-        return stack.isEmpty();
+        
+        return brackets.isEmpty();
     }
 }
