@@ -41,6 +41,9 @@ class Solution {
                 if (visited[nx][ny]) {
                     continue;
                 }
+                if (answer[nx][ny] != 0 && answer[nx][ny] < dist + 1) {
+                    continue;
+                }
                 visited[nx][ny] = true;
                 nodes.add(new Node(nx, ny, dist + 1));
                 if (mat[nx][ny] == 1) {
