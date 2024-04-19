@@ -1,45 +1,48 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        List<Integer>[] nodes = new List[numCourses];
-        for (int i=0; i<numCourses; i++) {
-            nodes[i] = new ArrayList<>();
-        }
-        
-        int[] indegrees = new int[numCourses];
+        List<Integer>[] courses = new List[numCourses];
+
         for (int[] ints : prerequisites) {
-            int to = ints[0];
-            int from = ints[1];
+            int target = ints[0];
+            int prerequisite = ints[1];
             
-            indegrees[to]++;
-            nodes[from].add(to);
+            if (courses[prerequisite] == null) {
+                courses[prerequisite] = new ArrayList<>();
+            }
+            courses[prerequisite].add(target);
         }
         
-        return isPossibleToSort(indegrees, nodes, numCourses);
+        boolean[] visited = new boolean[numCourses];
+        boolean[] finished = new boolean[numCourses];
+        for (int i=0; i<numCourses; i++) {
+            if (hasCycle(i, visited, finished, courses)) {
+                return false;
+            }
+        }
+        return true;
     }
     
-    private boolean isPossibleToSort(int[] indegrees, List<Integer>[] nodes, int numCourses) {
-        Queue<Integer> q = new ArrayDeque<>();
-        
-        for (int i=0; i<numCourses; i++) {
-            if (indegrees[i] == 0) {
-                q.add(i);
-            }
+    private boolean hasCycle(int num, boolean[] visited, boolean[] finished, List<Integer>[] courses) {
+        if (courses[num] == null) {
+            return false;
         }
         
-        Queue<Integer> answer = new ArrayDeque<>();
-        while (!q.isEmpty()) {
-            int node = q.poll();
-            answer.add(node);
-            
-            for (int nextNode : nodes[node]) {
-                indegrees[nextNode]--;
-                
-                if (indegrees[nextNode] == 0) {
-                    q.add(nextNode);
+        visited[num] = true;
+        boolean isCycle = false;
+        for (int next : courses[num]) {
+            if (!visited[next]) {
+                boolean flag = hasCycle(next, visited, finished, courses);
+                if (flag) {
+                    isCycle = true;
+                    break;
                 }
+            } else if (!finished[next]) {
+                isCycle = true;
+                break;
             }
         }
+        finished[num] = true;
         
-        return answer.size() == numCourses;
+        return isCycle;
     }
 }
