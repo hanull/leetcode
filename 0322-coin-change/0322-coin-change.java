@@ -7,28 +7,20 @@ class Solution {
             return 0;
         }
         
+        Arrays.sort(coins);
         int[] dp = new int[amount + 1];
-        int answer = getFewestNumberCoin(coins, amount, dp);
+        Arrays.fill(dp, MAX_VALUE);
+        dp[0] = 0;
         
-        return answer == MAX_VALUE ? -1 : answer;
-    }
-    
-    private int getFewestNumberCoin(int[] coins, int amount, int[] dp) {
-        if (amount < 0) {
-            return MAX_VALUE;
-        }
-        if (amount == 0) {
-            return 0;
-        }
-        if (dp[amount] > 0) {
-            return dp[amount];
+        for (int target=1; target<=amount; target++) {
+            for (int coin : coins) {
+                if (target < coin) {
+                    break;
+                }
+                dp[target] = Math.min(dp[target], dp[target - coin] + 1);
+            }
         }
         
-        int min = MAX_VALUE;
-        for (int coin : coins) {
-            min = Math.min(min, getFewestNumberCoin(coins, amount - coin, dp) + 1);
-        }
-        
-        return dp[amount] = min;
+        return dp[amount] == MAX_VALUE ? -1 : dp[amount];
     }
 }
