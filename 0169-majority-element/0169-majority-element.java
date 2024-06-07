@@ -1,25 +1,25 @@
 class Solution {
-    // sorting
     public int majorityElement(int[] nums) {
         Arrays.sort(nums);
-        return nums[nums.length / 2];
-    }
-    
-    // Moore voting algorithm
-    public int majorityElement2(int[] nums) {
-        int count = 1;
-        int major = nums[0];
-        for (int i=1; i<nums.length; i++) {
-            if (nums[i] == major) {
+        
+        int answer = nums[0];
+        int target = nums[0];
+        int max = 0;
+        int count = 0;
+        for (int num : nums) {
+            if (num == target) {
                 count++;
             } else {
-                count--;
-            }
-            if (count == 0) {
-                major = nums[i];
                 count = 1;
+                target = num;
+            }
+            
+            if (count >= nums.length / 2 && count > max) {
+                answer = num;
+                max = count;
             }
         }
-        return major;
+        
+        return answer;
     }
 }
