@@ -14,24 +14,25 @@
  * }
  */
 class Solution {
+    
+    private int diameter; 
+    
     public int diameterOfBinaryTree(TreeNode root) {
-        if (root == null) return 0;
+        dfs(root);
         
-        int[] maxDiameter = {0};
-        getMaxLength(root, maxDiameter);
-        
-        return maxDiameter[0];
+        return diameter;
     }
     
-    public int getMaxLength(TreeNode node, int[] maxDiameter) {
-        // 최대 깊이 구하기
-        int leftLength = node.left == null ? 0 : getMaxLength(node.left, maxDiameter);
-        int rightLength = node.right == null ? 0 : getMaxLength(node.right, maxDiameter);
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
         
-        // 최대 지름 길이 갱신하기
-        maxDiameter[0] = Math.max(maxDiameter[0], leftLength + rightLength);
+        int left = dfs(root.left);
+        int right = dfs(root.right);
         
-        // 현재 노드를 기준으로 왼쪽, 오른쪽 최대 길이 + 1(추가된 현재 노드) 반환하기
-        return Math.max(leftLength, rightLength) + 1;
+        diameter = Math.max(diameter, left + right);
+        
+        return Math.max(left, right) + 1;
     }
 }
