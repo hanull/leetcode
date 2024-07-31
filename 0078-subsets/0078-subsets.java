@@ -1,20 +1,31 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> answer = new ArrayList<>();
-        backtracking(0, new ArrayList<>(), answer, nums);
+        
+        dfs(0, new boolean[nums.length], nums, answer);
+        
         return answer;
     }
     
-    public void backtracking(int start, List<Integer> tempNums, List<List<Integer>> answer, int[] nums) {
-        if (start > nums.length) {
+    private void dfs(int index, boolean[] used, int[] nums, List<List<Integer>> answer) {
+        if (index == nums.length) {
+            answer.add(getSubset(nums, used));
             return;
         }
-        answer.add(new ArrayList<>(tempNums));
         
-        for (int i=start; i<nums.length; i++) {
-            tempNums.add(nums[i]);
-            backtracking(i+1, tempNums, answer, nums);
-            tempNums.remove(tempNums.size() - 1);
+        used[index] = true;
+        dfs(index + 1, used, nums, answer);
+        used[index] = false;
+        dfs(index + 1, used, nums, answer);
+    }
+    
+    private List<Integer> getSubset(int[] nums, boolean[] used) {
+        List<Integer> subset = new ArrayList<>();
+        for (int i=0; i<used.length; i++) {
+            if (used[i]) {
+                subset.add(nums[i]);
+            }
         }
+        return subset;
     }
 }
