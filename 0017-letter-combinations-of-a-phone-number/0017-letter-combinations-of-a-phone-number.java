@@ -1,48 +1,35 @@
 class Solution {
-    
-    static Map<Character, List<String>> map = new HashMap<>();
-    static {
-        map.put('2', Arrays.asList("a","b","c"));
-        map.put('3', Arrays.asList("d","e","f"));
-        map.put('4', Arrays.asList("g","h","i"));
-        map.put('5', Arrays.asList("j","k","l"));
-        map.put('6', Arrays.asList("m","n","o"));
-        map.put('7', Arrays.asList("p","q","r", "s"));
-        map.put('8', Arrays.asList("t","u","v"));
-        map.put('9', Arrays.asList("w","x","y", "z"));
-    }
-    
     public List<String> letterCombinations(String digits) {
-        if (digits == null || digits.length() == 0) return new ArrayList<>();
-        
-        Queue<String> q = new ArrayDeque<>();
-        int index = 0;
-        while (index < digits.length()) {
-            char targetNum = digits.charAt(index);
-            if (index==0) {
-                for (String str : map.get(targetNum)) {
-                    q.add(str);
-                }
-                index++;
-                continue;
-            }
-            int size = q.size();
-            int count = 0;
-            while (count < size) {
-                String temp = q.poll();
-                for (String str : map.get(targetNum)) {
-                    q.add(temp + str);
-                }
-                count++;
-            }
-            index++;
+        if (digits.isEmpty()) {
+            return new ArrayList<>();
         }
+        
+        Map<Character, List<String>> map = new HashMap<>();
+        map.put('2', List.of("a", "b", "c"));
+        map.put('3', List.of("d", "e", "f"));
+        map.put('4', List.of("g", "h", "i"));
+        map.put('5', List.of("j", "k", "l"));
+        map.put('6', List.of("m", "n", "o"));
+        map.put('7', List.of("p", "q", "r", "s"));
+        map.put('8', List.of("t", "u", "v"));
+        map.put('9', List.of("w", "x", "y", "z"));
         
         List<String> answer = new ArrayList<>();
-        while (!q.isEmpty()) {
-            answer.add(q.poll());
-        }
+        dfs(digits, 0, digits.length(), new StringBuilder(), map, answer);
         
         return answer;
+    }
+    
+    private void dfs(String digits, int index, int n, StringBuilder letter, Map<Character, List<String>> map, List<String> answer) {
+        if (index == n) {
+            answer.add(letter.toString());
+            return;
+        }
+        
+        for (String s : map.get(digits.charAt(index))) {
+            letter.append(s);
+            dfs(digits, index + 1, n, letter, map, answer);
+            letter.deleteCharAt(index);
+        }
     }
 }
