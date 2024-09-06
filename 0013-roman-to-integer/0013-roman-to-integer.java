@@ -1,46 +1,58 @@
 class Solution {
-    
-    static Map<String, Integer> map = new HashMap<>();
-    static {
-        map.put("I", 1);
-        map.put("V", 5);
-        map.put("X", 10);
-        map.put("L", 50);
-        map.put("C", 100);
-        map.put("D", 500);
-        map.put("M", 1000);
-        map.put("IV", 4);
-        map.put("IX", 9);
-        map.put("XL", 40);
-        map.put("XC", 90);
-        map.put("CD", 400);
-        map.put("CM", 900);
-    }
-    
     public int romanToInt(String s) {
-        if (s.length() == 1) {
-            return map.get(s);
-        }
+        Map<Character, Integer> symbolToValue = new HashMap<>();
+        symbolToValue.put('I', 1);
+        symbolToValue.put('V', 5);
+        symbolToValue.put('X', 10);
+        symbolToValue.put('L', 50);
+        symbolToValue.put('C', 100);
+        symbolToValue.put('D', 500);
+        symbolToValue.put('M', 1000);
         
-        String[] input = s.split("");
-        Stack<String> stack = new Stack<>();
-        for (String alpa : input) {
-            if (stack.isEmpty()) {
-                stack.add(alpa);
+        char[] romanNumerals = s.toCharArray();
+        int answer = 0;
+        for (int i=0; i<romanNumerals.length; i++) {
+            char ch = romanNumerals[i];
+            
+            if (ch == 'I' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'V') {
+                answer += 4;
+                i++;
                 continue;
             }
-            if (map.get(stack.peek()) < map.get(alpa)) {
-                String newAlpa = stack.pop() + alpa;
-                stack.add(newAlpa);
-            } else {
-                stack.add(alpa);
+            
+            if (ch == 'I' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'X') {
+                answer += 9;
+                i++;
+                continue;
             }
+            
+            if (ch == 'X' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'L') {
+                answer += 40;
+                i++;
+                continue;
+            }
+            
+            if (ch == 'X' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'C') {
+                answer += 90;
+                i++;
+                continue;
+            }
+            
+            if (ch == 'C' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'D') {
+                answer += 400;
+                i++;
+                continue;
+            }
+            
+            if (ch == 'C' && i<romanNumerals.length - 1 && romanNumerals[i + 1] == 'M') {
+                answer += 900;
+                i++;
+                continue;
+            }
+            
+            answer += symbolToValue.get(ch);
         }
         
-        int answer = 0;
-        while (!stack.isEmpty()) {
-            answer += map.get(stack.pop());
-        }
         return answer;
     }
 }
